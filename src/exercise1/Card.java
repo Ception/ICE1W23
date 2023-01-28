@@ -42,5 +42,15 @@ public class Card {
      */
     public void setValue(int value) {
         this.value = value;
-    }  
+    }
+
+    /**
+     * @return returns us a randomly generated value
+     */
+    public int randomCard() {
+        // adjust this for start of 1 = ace and add check to replace
+        // variable in array
+        int value = (int)(Math.random() * 7) + 2;
+        return value;
+    }
 }
