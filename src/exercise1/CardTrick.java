@@ -45,24 +45,28 @@ public class CardTrick {
         }
     }
 
+    /**
+     * starts a card game with the user
+     */
     private static void cardGame() {
         Card[] hand = new Card[7];
-        Card card = new Card();
-
+        
         Scanner in = new Scanner(System.in);
+        
+        for (int i = 0; i < hand.length; i++) {
+            Random ran = new Random();
+            Card card = new Card();
+
+            card.setValue(card.randomCard());
+            card.setSuit(Card.SUITS[ran.nextInt(3)]);
+            hand[i] = card;
+            System.out.println(card.getValue());
+        }
+
 
         System.out.print("Pick a card, any card!\nEnter the Card: ");
         int userCard = in.nextInt();
-
-        for (int i = 0; i < hand.length; i++) {
-            Random ran = new Random();
-
-            card.setValue(userCard);
-            card.setSuit(Card.SUITS[ran.nextInt(3)]);
-            hand[i] = card;
-        }
         
-
         String cardString = "";
         switch(userCard) {
             case 1:
@@ -87,7 +91,7 @@ public class CardTrick {
         System.out.print("Suit: ");
         int userSuit = in.nextInt();
         
-        while(userSuit > 4) {
+        while(userSuit > 4 || userSuit < 1) {
             System.out.printf("%d is not part of the Suite!\n", userSuit);
             System.out.print("Try again: ");
             userSuit = in.nextInt();
@@ -121,16 +125,22 @@ public class CardTrick {
 
         System.out.println("\nLet's see if your card is in the magic hand!\n");
 
-        for (Card myDeck : hand) {
-            while (myDeck.getValue() > 14) {
-                System.out.printf("Oh no! Unfortunately your %d was not in the magic hand!\nTry again: ", userCard);
-                userCard = in.nextInt();
-                if (userCard < 14) {
-                    continue;
+        boolean isCardInHand = false;
+        while (!isCardInHand) {
+            for (Card myDeck : hand) {
+                System.out.println(myDeck.getValue());
+                isCardInHand = userCard == myDeck.getValue();
+                if (isCardInHand) {
+                    isCardInHand = true;
+                    printInfo();
                 }
             }
-        }
-        printInfo();
+     
+            if (!isCardInHand) {
+                System.out.printf("%d is not in the magic hand!\nTry again: ", userCard);
+                userCard = in.nextInt();
+            }
+        } 
         in.close(); // we're done using the userInput, close() stream
     }
 
